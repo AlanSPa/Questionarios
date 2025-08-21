@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagnóstico de Automação de Processos</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #3996b3, #012017);
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      background: #fff;
+      max-width: 600px;
+      width: 100%;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      text-align: center;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      color: #3996b3;
+    }
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: #3996b3;
+    }
+    h3 {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+      color: #555;
+    }
+    p {
+      color: #555;
+      margin-bottom: 20px;
+    }
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #1e40af;
+    }
+    .option {
+      display: block;
+      margin: 12px 0;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+      text-align: left;
+    }
+    .option:hover {
+      border-color: #2563eb;
+      background: #f3f4f6;
+    }
+    .hidden {
+      display: none;
+    }
+    .progress {
+      margin-bottom: 20px;
+      height: 10px;
+      background: #e5e7eb;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: #2563eb;
+      transition: width 0.3s ease;
+    }
+    .result h2 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+    .result p {
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="app">
+    <h1>🤖 Diagnóstico de Automação</h1>
+    <h2>Processos da sua empresa</h2>
+    <h3>Descubra se você está perdendo tempo com tarefas manuais que poderiam ser automatizadas</h3>
+    <button onclick="startQuiz()">Iniciar</button>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        text: "Quantos processos da sua empresa ainda são feitos manualmente?",
+        options: [
+          { answer: "Quase todos", points: 0 },
+          { answer: "Mais da metade", points: 1 },
+          { answer: "Alguns processos críticos", points: 2 },
+          { answer: "A maioria é automatizada", points: 3 }
+        ]
+      },
+      {
+        text: "Tarefas repetitivas estão tomando muito tempo da equipe?",
+        options: [
+          { answer: "Sim, constantemente", points: 0 },
+          { answer: "Frequentemente", points: 1 },
+          { answer: "Algumas vezes", points: 2 },
+          { answer: "Raramente ou nunca", points: 3 }
+        ]
+      },
+      {
+        text: "Erros humanos impactam processos importantes?",
+        options: [
+          { answer: "Sim, frequentemente causam problemas", points: 0 },
+          { answer: "Ocorrem de vez em quando", points: 1 },
+          { answer: "Raramente impactam", points: 2 },
+          { answer: "Quase nunca há erros humanos", points: 3 }
+        ]
+      },
+      {
+        text: "Você possui ferramentas de automação em uso?",
+        options: [
+          { answer: "Não utilizamos nenhuma ferramenta", points: 0 },
+          { answer: "Temos algumas ferramentas pouco exploradas", points: 1 },
+          { answer: "Ferramentas são usadas em processos selecionados", points: 2 },
+          { answer: "Ferramentas cobrem a maioria dos processos", points: 3 }
+        ]
+      },
+      {
+        text: "O tempo gasto em processos manuais impacta a produtividade?",
+        options: [
+          { answer: "Sim, impacta muito", points: 0 },
+          { answer: "Impacta parcialmente", points: 1 },
+          { answer: "Pouco impacto", points: 2 },
+          { answer: "Não impacta", points: 3 }
+        ]
+      },
+      {
+        text: "Processos críticos estão documentados e padronizados?",
+        options: [
+          { answer: "Não estão documentados", points: 0 },
+          { answer: "Documentação incompleta", points: 1 },
+          { answer: "Documentados parcialmente", points: 2 },
+          { answer: "Documentados e padronizados", points: 3 }
+        ]
+      },
+      {
+        text: "Você já pensou em automatizar tarefas complexas mas não sabe por onde começar?",
+        options: [
+          { answer: "Sim, precisamos de ajuda urgente", points: 0 },
+          { answer: "Sim, mas estamos adiando", points: 1 },
+          { answer: "Estamos estudando soluções", points: 2 },
+          { answer: "Não, já temos processos automatizados", points: 3 }
+        ]
+      }
+    ];
+
+    let currentQuestion = 0;
+    let totalPoints = 0;
+
+    const app = document.getElementById('app');
+
+    function startQuiz() {
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      app.innerHTML = `
+        <div class="progress">
+          <div class="progress-bar" style="width:${((currentQuestion)/questions.length)*100}%"></div>
+        </div>
+        <h1>Pergunta ${currentQuestion+1} de ${questions.length}</h1>
+        <p>${q.text}</p>
+        ${q.options.map((o) => `
+          <div class="option" onclick="selectOption(${o.points})">${o.answer}</div>
+        `).join('')}
+      `;
+    }
+
+    function selectOption(points) {
+      totalPoints += points;
+      currentQuestion++;
+      if(currentQuestion < questions.length){
+        showQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      let nivel = "";
+      let mensagem = "";
+      if(totalPoints <= 6){
+        nivel = "Básico / Iniciante";
+        mensagem = "⚠️ Sua empresa ainda depende muito de processos manuais, perdendo tempo e aumentando risco de erros. Entre em contato com a WATI para descobrir como automatizar rapidamente!";
+      } else if(totalPoints <= 12){
+        nivel = "Intermediário";
+        mensagem = "⚠️ Alguns processos já foram automatizados, mas ainda há riscos e perdas de produtividade. A WATI pode ajudar a ampliar a automação e reduzir esforços manuais.";
+      } else {
+        nivel = "Avançado";
+        mensagem = "✅ Parabéns! Sua empresa já está avançando na automação de processos. Continue evoluindo para ganhar ainda mais eficiência e reduzir erros.";
+      }
+
+      app.innerHTML = `
+        <div class="result">
+          <h2>Resultado: ${nivel}</h2>
+          <h3>${mensagem}</h3>
+          <button onclick="location.reload()">Refazer Diagnóstico</button>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>
