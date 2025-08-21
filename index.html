@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagnóstico de Qualidade de Software</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #3996b3, #012017);
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      background: #fff;
+      max-width: 600px;
+      width: 100%;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      text-align: center;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      color: #1e3a8a;
+    }
+    p {
+      color: #555;
+      margin-bottom: 20px;
+    }
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #1e40af;
+    }
+    .option {
+      display: block;
+      margin: 12px 0;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+      text-align: left;
+    }
+    .option:hover {
+      border-color: #2563eb;
+      background: #f3f4f6;
+    }
+    .hidden {
+      display: none;
+    }
+    .progress {
+      margin-bottom: 20px;
+      height: 10px;
+      background: #e5e7eb;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: #2563eb;
+      transition: width 0.3s ease;
+    }
+    .result h2 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+    .result p {
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="app">
+    <h1>🚀 Diagnóstico de Qualidade de Software</h1>
+    <p>Responda algumas perguntas e descubra o nível de maturidade da sua aplicação</p>
+    <button onclick="startQuiz()">Iniciar</button>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        text: "Sua empresa realiza testes de software regularmente?",
+        options: [
+          { answer: "Não realizamos nenhum teste", points: 0 },
+          { answer: "Testes ocasionais e não estruturados", points: 1 },
+          { answer: "Testes em etapas críticas", points: 2 },
+          { answer: "Testes automatizados e contínuos", points: 3 }
+        ]
+      },
+      {
+        text: "Você possui um processo documentado para qualidade de software?",
+        options: [
+          { answer: "Não temos nenhum processo definido", points: 0 },
+          { answer: "Existe um processo, mas pouco seguido", points: 1 },
+          { answer: "Seguimos processos em alguns projetos", points: 2 },
+          { answer: "Todos os projetos seguem processos claros e definidos", points: 3 }
+        ]
+      },
+      {
+        text: "Sua equipe utiliza ferramentas de automação de testes?",
+        options: [
+          { answer: "Não utilizamos nenhuma ferramenta", points: 0 },
+          { answer: "Já utilizamos em testes pontuais", points: 1 },
+          { answer: "Usamos em vários projetos", points: 2 },
+          { answer: "Toda a empresa utiliza ferramentas de automação", points: 3 }
+        ]
+      },
+      {
+        text: "Como é feito o acompanhamento de bugs e falhas?",
+        options: [
+          { answer: "Não existe controle", points: 0 },
+          { answer: "É feito manualmente em planilhas", points: 1 },
+          { answer: "Usamos ferramentas em alguns projetos", points: 2 },
+          { answer: "Usamos ferramentas em todos os projetos", points: 3 }
+        ]
+      },
+      {
+        text: "Sua empresa realiza testes de performance e carga?",
+        options: [
+          { answer: "Nunca realizamos", points: 0 },
+          { answer: "Só quando há problemas em produção", points: 1 },
+          { answer: "Em alguns projetos estratégicos", points: 2 },
+          { answer: "Sempre realizamos antes da entrega", points: 3 }
+        ]
+      },
+      {
+        text: "Como é a cultura de qualidade na sua equipe?",
+        options: [
+          { answer: "Qualidade não é prioridade", points: 0 },
+          { answer: "Alguns membros se preocupam", points: 1 },
+          { answer: "A maioria já pratica boas práticas", points: 2 },
+          { answer: "Qualidade é parte da cultura organizacional", points: 3 }
+        ]
+      },
+      {
+        text: "Você mede indicadores de qualidade (ex: cobertura de testes, falhas em produção)?",
+        options: [
+          { answer: "Não medimos nada", points: 0 },
+          { answer: "Medimos de forma informal", points: 1 },
+          { answer: "Temos métricas em alguns projetos", points: 2 },
+          { answer: "Métricas fazem parte de todas as entregas", points: 3 }
+        ]
+      }
+    ];
+
+    let currentQuestion = 0;
+    let totalPoints = 0;
+
+    const app = document.getElementById('app');
+
+    function startQuiz() {
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      app.innerHTML = `
+        <div class="progress">
+          <div class="progress-bar" style="width:${((currentQuestion)/questions.length)*100}%"></div>
+        </div>
+        <h1>Pergunta ${currentQuestion+1} de ${questions.length}</h1>
+        <p>${q.text}</p>
+        ${q.options.map((o, i) => `
+          <div class="option" onclick="selectOption(${o.points})">${o.answer}</div>
+        `).join('')}
+      `;
+    }
+
+    function selectOption(points) {
+      totalPoints += points;
+      currentQuestion++;
+      if(currentQuestion < questions.length){
+        showQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      let nivel = "";
+      let mensagem = "";
+      if(totalPoints <= 6){
+        nivel = "Básico / Iniciante";
+        mensagem = "⚠️ Sua empresa está exposta a riscos altos: falhas em produção, retrabalho e perda de clientes podem ocorrer. É fundamental começar a estruturar testes e processos.";
+      } else if(totalPoints <= 12){
+        nivel = "Intermediário";
+        mensagem = "⚠️ Sua empresa já possui alguns cuidados com qualidade, mas ainda há riscos relevantes. Investir em automação e métricas ajudará a reduzir falhas e aumentar a confiança.";
+      } else {
+        nivel = "Avançado";
+        mensagem = "✅ Parabéns! Sua empresa demonstra maturidade em qualidade de software. Continue evoluindo em métricas e inovação para manter a competitividade.";
+      }
+
+      app.innerHTML = `
+        <div class="result">
+          <h2>Resultado: ${nivel}</h2>
+          <p>${mensagem}</p>
+          <button onclick="location.reload()">Refazer Diagnóstico</button>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>
